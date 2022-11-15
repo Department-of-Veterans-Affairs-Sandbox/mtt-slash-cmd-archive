@@ -1,0 +1,29 @@
+{
+    "name": "mtt-slash-cmd-archive",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "npm install  && ./node_modules/.bin/ncc build index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Department-of-Veterans-Affairs-Sandbox/mtt-slash-cmd-archive.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Department-of-Veterans-Affairs-Sandbox/mtt-slash-cmd-archive/issues"
+    },
+    "homepage": "https://github.com/Department-of-Veterans-Affairs-Sandbox/mtt-slash-cmd-archive#readme",
+    "dependencies": {
+        "@actions/core": "^1.10.0",
+        "@octokit/plugin-retry": "^4.0.3",
+        "@octokit/plugin-throttling": "^4.3.2",
+        "@octokit/rest": "^19.0.5"
+    },
+    "devDependencies": {
+        "@vercel/ncc": "^0.34.0"
+    }
+}
