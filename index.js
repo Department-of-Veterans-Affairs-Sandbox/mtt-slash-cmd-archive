@@ -67,7 +67,7 @@ async function main() {
         })
             .then((response) => {
                 let payload = JSON.stringify(response)
-                core.info(data)
+                core.info(payload)
                 archived = payload.data.archived
                 core.info('Got repo')    
             })
@@ -91,7 +91,7 @@ async function main() {
                 message = `Repo ${repoToArchive} already archived!`
             }
         }else{
-            message = `Repo ${repoToArchive} does not exist OR already archived in org ${org}`
+            message = `Repo ${repoToArchive} does not exist in ${org}`
             core.info(message)
         }
 
