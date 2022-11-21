@@ -91,7 +91,7 @@ async function main() {
                 message = `Repo ${repoToArchive} already archived!`
             }
         }else{
-            message = `Repo ${repoToArchive} does not exist in org ${org}`
+            message = `Repo ${repoToArchive} does not exist OR already archived in org ${org}`
             core.info(message)
         }
 
