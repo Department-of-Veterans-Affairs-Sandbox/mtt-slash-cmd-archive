@@ -11305,8 +11305,9 @@ async function main() {
             repo: repoToArchive
         })
             .then((response) => {
-                let payload = JSON.stringify(response)
-                core.info(payload.data)
+                let payloadObj = JSON.stringify(response)
+                core.info(payloadObj)
+                let payload = JSON.parse(payloadObj)
                 archived = payload.data.archived
                 core.info('Got repo')    
             })
