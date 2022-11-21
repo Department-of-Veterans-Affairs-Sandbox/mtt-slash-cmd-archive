@@ -11306,7 +11306,7 @@ async function main() {
         })
             .then((response) => {
                 let payload = JSON.stringify(response)
-                core.info(payload)
+                core.info(payload.data)
                 archived = payload.data.archived
                 core.info('Got repo')    
             })
