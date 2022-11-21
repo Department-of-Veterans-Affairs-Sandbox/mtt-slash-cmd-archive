@@ -39,35 +39,72 @@ async function main() {
     const githubToken = core.getInput('token', { required: true, trimWhitespace: true })
     const repoToArchive = _body[_body.length - 1]
 
-    let failed = false
-    try {
-        core.info('Creating client')
-        const client = await newClient(adminToken)
-        core.debug('Client created')
+    //log info 
+    core.info(`ACTOR: ${actor}`)
+    core.info(`body: ${_body}`)
+    core.info(`ORG: ${org}`)
+    core.info(`Current REPO: ${repo}`)
+    core.info(`Issue number: ${issueNumber}`)
+    core.info(`REPO to archive: ${repoToArchive}`)
+    //
+    
+    let message = ""
+    let archived = false
 
-        core.info('Creating issue')
-        await client.repos.update({
+    try {
+        
+        //get repo
+        core.info('Creating repo client')
+        const client = await newClient(adminToken)
+        core.debug('Repo Client created')
+
+        let repoExist = true;
+
+        core.info('Getting repo')
+        await client.repos.get({
             owner: org,
-            repo: repoToArchive,
-            archived: true
+            repo: repoToArchive
         })
-        core.debug('Issue created')
+            .then((response) => {
+                let payload = JSON.stringify(response)
+                core.info(data)
+                archived = payload.data.archived
+                core.info('Got repo')    
+            })
+            .catch((e) => {
+                repoExist = false;
+                core.error(e.message)
+            })
+        
+        if(repoExist){
+            //check repo was archived
+            if(!archived){
+
+                await client.repos.update({
+                    owner: org,
+                    repo: repoToArchive,
+                    archived: true
+                })
+        
+                message = `Archived repo ${repoToArchive}!`
+            }else{
+                message = `Repo ${repoToArchive} already archived!`
+            }
+        }else{
+            message = `Repo ${repoToArchive} does not exist in org ${org}`
+            core.info(message)
+        }
+
     } catch (e) {
-        failed = true
         core.setFailed(`Failed to archive repo: ${e.message}`)
     }
 
+    //then update issue
     try {
         core.info('Creating client')
         const client = await newClient(githubToken)
         core.debug('Client created')
 
-        let message
-        if (failed) {
-            message = `@${actor} failed to archive repo ${repoToArchive}`
-        } else {
-            message = `@${actor} archived repo ${repoToArchive}`
-        }
         core.info('Creating issue')
         await client.issues.createComment({
             owner: org,
